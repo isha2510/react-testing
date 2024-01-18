@@ -2,10 +2,9 @@ import { render, screen } from "@testing-library/react"
 import UserForm from "./UserForm"
 import userEvent from "@testing-library/user-event";
 
-const argList=[];
-const callback=(...args)=>{
-    argList.push(args);
-}
+
+const mock = jest.fn();
+
 
 test('It shows two input and a button', () => {
     //render the component to test
@@ -21,8 +20,13 @@ test('It shows two input and a button', () => {
 });
 
 test('it calls onUserAdd when the form is submitted', async () => {
-    render(<UserForm onUserAdd={callback} />);
-    const [nameInput, emailInput] = screen.getAllByRole('textbox');
+    render(<UserForm onUserAdd={mock} />);
+    const nameInput = screen.getByRole('textbox', {
+        name: /name/i
+    });
+    const emailInput = screen.getByRole('textbox',{
+        name:/email/i
+    });
 
     await userEvent.click(nameInput);
     await userEvent.keyboard('test');
@@ -33,7 +37,7 @@ test('it calls onUserAdd when the form is submitted', async () => {
     const button = screen.getByRole('button');
     await userEvent.click(button);
 
-    expect(argList).toHaveLength(1);
-    expect(argList[0][0]).toEqual({name:'test',email:'test@test.com'})
+    expect(mock).toHaveBeenCalled();
+    expect(mock).toHaveBeenCalledWith({ name: 'test', email: 'test@test.com' });
 
 });
