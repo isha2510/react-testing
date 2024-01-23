@@ -1,13 +1,18 @@
 import { render, screen, within } from "@testing-library/react"
 import UserList from "./UserList"
 
-test('render one row per user', () => {
+const renderComponent = () => {
     const users = [
         { name: 'test', email: 'test@test.com' },
         { name: 'test1', email: 'test1@test.com' }
     ];
     render(<UserList users={users} />);
 
+    return { users };
+}
+
+test('render one row per user', () => {
+    renderComponent();
     //eslint-disable-next-line
     //const rows = container.querySelectorAll('tbody tr');
 
@@ -18,12 +23,8 @@ test('render one row per user', () => {
 });
 
 test('render the email and name of each user', () => {
-    const users = [
-        { name: 'test', email: 'test@test.com' },
-        { name: 'test1', email: 'test1@test.com' }
-    ];
-    render(<UserList users={users} />);
 
+    const { users } = renderComponent();
     //Below line will generate playground link, it helps to find the query for specific element
     // screen.logTestingPlaygroundURL();
 
