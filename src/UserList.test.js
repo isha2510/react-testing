@@ -35,4 +35,19 @@ test('render the email and name of each user', () => {
         expect(email).toBeInTheDocument();
 
     }
+});
+
+test('finding 0 elements', async () => {
+    render(<UserList />);
+    expect(() => screen.getByRole('textbox')).toThrow();
+    expect(screen.queryByRole('textbox')).toEqual(null);
+
+    let errorThrown=false;
+    try{
+        await screen.findByRole('textbox');
+    } catch(err){
+        errorThrown=true;
+    }
+
+    expect(errorThrown).toEqual(true);
 })
